@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Shapes
+  m_EditorClassIdentifier: 
+  m_GroupName: Shapes
+  m_GUID: 6280eda85a6056f4da7aa3a70e873ce7
+  m_SerializeEntries:
+  - m_GUID: 05d6a5cb1373da843b061b09fbdcda19
+    m_Address: Assets/Content/Graphics/Shapes/shape_1.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37115b3c8ccde81498734c284ea16fee
+    m_Address: Assets/Content/Graphics/Shapes/shape_circle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 768e2c9f42479be448ed46f7949c95c5
+    m_Address: Assets/Content/Graphics/Shapes/shape_A.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d15c6325274cd9e4a9d609e85aee542f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 23d39d63e771f9749823763437cf4a34, type: 2}
+    - {fileID: 11400000, guid: 67cd5a67c2e7b5b46a63cca886592def, type: 2}
