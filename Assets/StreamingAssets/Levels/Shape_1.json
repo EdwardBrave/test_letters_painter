@@ -1,12 +1,12 @@
 {
   "shapeAssetGUID": "05d6a5cb1373da843b061b09fbdcda19",
   "mainColor": {
-    "r": 1.0,
-    "g": 0.0,
-    "b": 0.0,
+    "r": 0.0,
+    "g": 1.0,
+    "b": 0.241366386,
     "a": 1.0
   },
-  "goalAudioAssetGUID": null,
+  "goalAudioAssetGUID": "",
   "lines": [
     {
       "width": 1.0,

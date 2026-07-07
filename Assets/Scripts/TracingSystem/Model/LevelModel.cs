@@ -11,7 +11,7 @@ namespace TracingSystem.Model
         public string shapeAssetGUID;
         public Color mainColor;
         public string goalAudioAssetGUID;
-        public List<LineModel> lines;
+        public List<LineModel> lines = new ();
 
         [JsonIgnore]
         public int ActiveLine { get; set; } = -1;

@@ -14,27 +14,32 @@ namespace TracingSystem
         [Header("Configs and references")]
         public LineTracerView lineTracerViewPrefab;
     
-        public ShapeMaskView shapeMaskView;
+        public LevelView levelView;
         
         [Header("Current State Data")]
         public AssetReferenceSprite shapeAssetRef;
         public AssetReferenceT<AudioClip> goalAudioRef;
         
         public Color mainColor;
-        public List<LineTracerView> lineTracerViews;
 
 #if UNITY_EDITOR
         public void OnValidate()
         {
-            if (shapeAssetRef != null && shapeMaskView != null)
+            if (!levelView)
             {
-                Sprite sprite = AssetDatabase.LoadAssetByGUID<Sprite>(new GUID(shapeAssetRef.AssetGUID));
-                shapeMaskView.Init(sprite);
+                return;
             }
             
-            lineTracerViews.Clear();
-            lineTracerViews = new List<LineTracerView>(GetComponentsInChildren<LineTracerView>());
-            foreach (var lineTracerView in lineTracerViews)
+            if (shapeAssetRef != null && levelView.shapeMaskView != null)
+            {
+                Sprite sprite = AssetDatabase.LoadAssetByGUID<Sprite>(new GUID(shapeAssetRef.AssetGUID));
+                levelView.shapeMaskView.UpdateSprite(sprite);
+            }
+            
+            levelView.lineTracerViews.Clear();
+            levelView.lineTracerViews = new List<LineTracerView>(
+                levelView.linesContainer.GetComponentsInChildren<LineTracerView>());
+            foreach (var lineTracerView in levelView.lineTracerViews)
             {
                 lineTracerView.ApplyColor(mainColor);
             }
@@ -63,7 +68,7 @@ namespace TracingSystem
         public void InstantiateLineTracerView(LineModel lineModel = null, Color defaultColor = default)
         {
             
-            var newLine = PrefabUtility.InstantiatePrefab(lineTracerViewPrefab, transform);
+            var newLine = PrefabUtility.InstantiatePrefab(lineTracerViewPrefab, levelView.linesContainer);
             if (newLine is LineTracerView view && lineModel != null)
             {
                 view.Init(lineModel.points, lineModel.width, defaultColor, lineModel.Progress);
@@ -75,14 +80,27 @@ namespace TracingSystem
             OnValidate();
 
             var lines = new List<LineModel>();
-            foreach (var lineTracerView in lineTracerViews)
+            foreach (var lineTracerView in levelView.lineTracerViews)
             {
-                lineTracerView.CollectState(out List<Vector2> points, out float width);
-                lines.Add(new LineModel
+                var lineRenderer = lineTracerView.LineRenderer;
+                if (lineRenderer == null || lineRenderer.positionCount == 0)
                 {
-                    points = points,
-                    width = width,
-                });
+                    continue;
+                }
+
+                var model = new LineModel
+                {
+                    width = lineRenderer.startWidth,
+                    points = new List<Vector2>()
+                };
+
+                for (int i = 0; i < lineRenderer.positionCount; i++)
+                {
+                    var pos = lineRenderer.GetPosition(i);
+                    model.points.Add(new Vector2(pos.x, pos.y));
+                }
+                
+                lines.Add(model);
             }
             
             return new LevelModel

@@ -7,16 +7,10 @@ namespace TracingSystem.View
         [SerializeField] private SpriteMask shapeMask;
         [SerializeField] private SpriteRenderer shapeRenderer;
     
-        public void Init(Sprite shape)
+        public void UpdateSprite(Sprite shape = null)
         {
             shapeMask.sprite = shape;
             shapeRenderer.sprite = shape;
-        }
-
-        public void Clear()
-        {
-            shapeMask.sprite = null;
-            shapeRenderer.sprite = null;
         }
     }
 }
