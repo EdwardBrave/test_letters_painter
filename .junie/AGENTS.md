@@ -42,3 +42,6 @@
 - Timer resets on any tap/swipe.
 - **7s**: Repeat voice instruction.
 - **14s**: Show cyclic animated finger hint on route. Hides on draw start.
+
+## Additional notes
+- DO NOT build the solution.

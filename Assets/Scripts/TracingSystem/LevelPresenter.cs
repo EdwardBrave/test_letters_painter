@@ -1,44 +1,45 @@
-﻿using System;
+using System;
 using TracingSystem.Model;
 using TracingSystem.View;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
 namespace TracingSystem
 {
     public class LevelPresenter : IInitializable, IDisposable
     {
-        private LevelView _view;
-        private LevelModel _model;
-        
-        private AssetReferenceSprite _shapeAssetRef;
-        private AssetReferenceT<AudioClip> _goalAudioRef;
-        
-        public LevelPresenter(LevelModel levelModel, LevelView levelView)
+        private readonly LevelView _view;
+        private readonly FullLevelModel _model;
+        private readonly LineTracerView.Factory _lineViewFactory;
+
+        public LevelPresenter(FullLevelModel model, LevelView view, LineTracerView.Factory lineViewFactory)
         {
-            _view = levelView;
-            _model = levelModel;
-            
-            _shapeAssetRef = new AssetReferenceSprite(_model.shapeAssetGUID);
-            _goalAudioRef = new AssetReferenceT<AudioClip>(_model.goalAudioAssetGUID);
-        }
-        
-        public void Initialize()
-        {
-            _shapeAssetRef.LoadAssetAsync<Sprite>().Completed += HandleShapeAssetLoaded;
+            _model = model;
+            _view = view;
+            _lineViewFactory = lineViewFactory;
         }
 
-        private void HandleShapeAssetLoaded(AsyncOperationHandle<Sprite> handle)
+        public void Initialize()
         {
-            _view.shapeMaskView.UpdateSprite(handle.Result);
+            _view.shapeMaskView.UpdateSprite(_model.Shape);
+            PopulateLineTracerViews();
         }
-        
+
+        private void PopulateLineTracerViews()
+        {
+            foreach (var existing in _view.lineTracerViews)
+                existing.Clear();
+            _view.lineTracerViews.Clear();
+
+            foreach (var lineModel in _model.Lines)
+            {
+                var view = _lineViewFactory.Create();
+                view.Init(lineModel.Points, lineModel.Width, _model.MainColor, lineModel.Progress);
+                _view.lineTracerViews.Add(view);
+            }
+        }
+
         public void Dispose()
         {
-            _shapeAssetRef.ReleaseAsset();
-            _goalAudioRef.ReleaseAsset();
         }
     }
 }

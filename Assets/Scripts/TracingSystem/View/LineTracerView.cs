@@ -11,7 +11,7 @@ namespace TracingSystem.View
         
         public LineRenderer LineRenderer => lineRenderer;
 
-        public void Init(List<Vector2> points, float width, Color color, float progress = 0f)
+        public void Init(IReadOnlyList<Vector2> points, float width, Color color, float progress = 0f)
         {
             lineRenderer.startWidth = lineRenderer.endWidth = width;
             ApplyColor(color);

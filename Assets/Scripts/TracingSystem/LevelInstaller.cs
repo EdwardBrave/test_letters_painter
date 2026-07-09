@@ -1,4 +1,4 @@
-﻿using TracingSystem.Model;
+using TracingSystem.Model;
 using TracingSystem.View;
 using UnityEngine;
 using Zenject;
@@ -8,6 +8,8 @@ namespace TracingSystem
     public class LevelInstaller : MonoInstaller<LevelInstaller>
     {
         [SerializeField] private LevelView levelView;
+        [SerializeField] private LineTracerView lineViewPrefab;
+        [SerializeField] private Transform lineViewContainer;
 
         public override void InstallBindings()
         {
@@ -15,7 +17,11 @@ namespace TracingSystem
             //Container.Bind<IAssetProvider>().To<AddressableAssetProvider>().AsSingle();
 
             // Pass direct or mocked configuration data into the model for this level
-            Container.Bind<LevelModel>().AsSingle().IfNotBound();
+            Container.Bind<FullLevelModel>().AsSingle().IfNotBound();
+            Container.BindFactory<LineTracerView, LineTracerView.Factory>()
+                .FromComponentInNewPrefab(lineViewPrefab)
+                .UnderTransform(lineViewContainer)
+                .AsSingle();
             Container.BindInstance(levelView).AsSingle();
             Container.BindInterfacesAndSelfTo<LevelPresenter>().AsSingle().NonLazy();
         }
