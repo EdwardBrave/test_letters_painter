@@ -1,7 +1,7 @@
 using Services;
 using Zenject;
 
-namespace CoreInstallers
+namespace Core
 {
     public class ServicesInstaller : MonoInstaller
     {
@@ -11,7 +11,7 @@ namespace CoreInstallers
             // run — the service owns the Addressables lifecycle across scenes.
             Container.BindInterfacesAndSelfTo<AssetLoadingService>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LevelSerializationService>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LevelService>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LevelLoadingService>().AsSingle().NonLazy();
         }
     }
 }

@@ -35,12 +35,13 @@ namespace TracingSystem.Model
         }
 
         public event Action OnDispose;
-
-        /// <summary>Idempotent. Raises <see cref="OnDispose"/> once; releases nothing directly.</summary>
+        
         public void Dispose()
         {
             if (_disposed)
+            {
                 return;
+            }
 
             _disposed = true;
             OnDispose?.Invoke();

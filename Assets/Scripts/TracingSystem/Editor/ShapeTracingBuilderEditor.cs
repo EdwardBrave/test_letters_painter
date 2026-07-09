@@ -38,6 +38,7 @@ namespace TracingSystem.Editor
                 string filePath = EditorUtility.OpenFilePanel("Select Preset JSON", folderPath, "json");
                 if (!string.IsNullOrEmpty(filePath))
                 {
+                    presetName = Path.GetFileNameWithoutExtension(filePath);
                     builder.ImportFromJson(filePath);
                     EditorUtility.SetDirty(builder);
                     Debug.Log($"Imported preset from {filePath}");

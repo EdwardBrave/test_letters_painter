@@ -9,18 +9,18 @@ using UnityEngine;
 namespace Services
 {
 
-    public class LevelService
+    public class LevelLoadingService
     {
         private readonly AssetLoadingService _assetLoadingService;
         private readonly LevelSerializationService levelLevelSerializationServiceService;
 
-        public LevelService(LevelSerializationService levelLevelSerializationServiceService, AssetLoadingService assetLoadingService)
+        public LevelLoadingService(LevelSerializationService levelLevelSerializationServiceService, AssetLoadingService assetLoadingService)
         {
             this.levelLevelSerializationServiceService = levelLevelSerializationServiceService;
             _assetLoadingService = assetLoadingService;
         }
         
-        public async UniTask<List<LightLevelModel>> LoadAllLightLevelsAsync(CancellationToken token)
+        public async UniTask<List<LightLevelModel>> LoadAllLightLevelsAsync(CancellationToken token = default)
         {
             var lightLevels = new List<LightLevelModel>();
             
@@ -50,7 +50,7 @@ namespace Services
             return lightLevels;
         }
         
-        public async UniTask<FullLevelModel> LoadFullLevelAsync(string levelName, CancellationToken token)
+        public async UniTask<FullLevelModel> LoadFullLevelAsync(string levelName, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(levelName))
             {

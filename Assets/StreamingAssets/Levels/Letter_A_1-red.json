@@ -1,12 +1,14 @@
 {
+  "category": 1,
+  "name": null,
   "shapeAssetGUID": "768e2c9f42479be448ed46f7949c95c5",
+  "goalAudioAssetGUID": "75116a2187688f542a42cb5e69c825a3",
   "mainColor": {
-    "r": 0.2509804,
-    "g": 0.334516943,
-    "b": 0.6784314,
+    "r": 0.7607843,
+    "g": 0.223529413,
+    "b": 0.235340983,
     "a": 1.0
   },
-  "goalAudioAssetGUID": "24b30a9dc9e1de44ca81a12b91b1dbb7",
   "lines": [
     {
       "width": 1.0,

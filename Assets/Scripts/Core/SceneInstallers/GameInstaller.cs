@@ -1,8 +1,9 @@
+using Core.States;
 using Services.Scene;
 using UnityEngine;
 using Zenject;
 
-namespace CoreInstallers.Scenes
+namespace Core.SceneInstallers
 {
     public class GameInstaller : MonoInstaller<GameInstaller>
     {
@@ -11,6 +12,8 @@ namespace CoreInstallers.Scenes
         public override void InstallBindings()
         {
             Container.Bind<GameAudioService>().AsSingle().NonLazy();
+            
+            Container.BindInterfacesAndSelfTo<GameState>().AsSingle().NonLazy();
         }
     }
 }

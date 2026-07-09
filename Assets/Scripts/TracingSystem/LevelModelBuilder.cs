@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using Services;
 using TracingSystem.Dto;
+using TracingSystem.Model;
 using TracingSystem.View;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -20,6 +21,7 @@ namespace TracingSystem
         public LevelView levelView;
 
         [Header("Current State Data")]
+        public LevelCategory levelCategory;
         public AssetReferenceSprite shapeAssetRef;
         public AssetReferenceT<AudioClip> goalAudioRef;
 
@@ -87,6 +89,7 @@ namespace TracingSystem
 
             return new LevelDto
             {
+                category = levelCategory,
                 shapeAssetGUID = shapeAssetRef?.AssetGUID,
                 goalAudioAssetGUID = goalAudioRef?.AssetGUID,
                 mainColor = mainColor,
@@ -96,6 +99,7 @@ namespace TracingSystem
         
         public void ApplyLevelDto(LevelDto dto)
         {
+            levelCategory = dto.category;
             shapeAssetRef = new AssetReferenceSprite(dto.shapeAssetGUID);
             goalAudioRef = new AssetReferenceT<AudioClip>(dto.goalAudioAssetGUID);
             mainColor = dto.mainColor;
@@ -117,7 +121,10 @@ namespace TracingSystem
 
         public void ExportToJson(string levelName)
         {
-            levelSerializationService.WriteToFile(BuildLevelDto(), levelName);
+            var dto = BuildLevelDto();
+            dto.name = levelName;
+            
+            levelSerializationService.WriteToFile(dto, levelName);
         }
 
         public void ImportFromJson(string filePath)
