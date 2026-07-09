@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Services;
 using TracingSystem.Model;
@@ -24,6 +25,12 @@ namespace Core.States
         
         public void Initialize()
         {
+            var projectContainer = ProjectContext.Instance.Container;
+            if (projectContainer.HasBinding<FullLevelModel>())
+            {
+                projectContainer.Unbind<FullLevelModel>();
+            }
+
             InitializeAsync().Forget();
         }
         
@@ -43,7 +50,11 @@ namespace Core.States
                 categories[levelModel.Category].Levels.Add(levelModel);
             }
             
-            foreach (var category in categories.Values)
+            var sortedCategories = categories.Values
+                .OrderBy(x => x.Category)
+                .ToList();
+            
+            foreach (var category in sortedCategories)
             {
                 var categoryPresenter = _categoryPresenterFactory.Create(category);
                 categoryPresenter.PopulateLevels();
@@ -79,11 +90,11 @@ namespace Core.States
                 var projectContainer = ProjectContext.Instance.Container;
                 if (projectContainer.HasBinding<FullLevelModel>())
                 {
-                    projectContainer.Rebind<FullLevelModel>().FromInstance(level).AsSingle();
+                    projectContainer.Rebind<FullLevelModel>().FromInstance(level);
                 }
                 else
                 {
-                    projectContainer.BindInstance(level).AsSingle();
+                    projectContainer.BindInstance(level);
                 }
                 
                 SceneManager.LoadScene("Game");

@@ -1,12 +1,14 @@
 {
+  "category": 2,
+  "name": "Number_1_7-magenta",
   "shapeAssetGUID": "05d6a5cb1373da843b061b09fbdcda19",
+  "goalAudioAssetGUID": "24b30a9dc9e1de44ca81a12b91b1dbb7",
   "mainColor": {
-    "r": 1.0,
-    "g": 0.0,
-    "b": 0.0,
+    "r": 0.591194868,
+    "g": 0.21379678,
+    "b": 0.528813,
     "a": 1.0
   },
-  "goalAudioAssetGUID": null,
   "lines": [
     {
       "width": 1.0,

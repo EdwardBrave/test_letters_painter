@@ -12,7 +12,7 @@ namespace Core.SceneInstallers
         [SerializeField] private Transform categoriesContainer;
         
         [SerializeField] private LevelCategoryView levelCategoryViewPrefab;
-        [SerializeField] private LevelButtonView levelButtonViewPrefab;
+        [SerializeField] private ButtonView levelButtonViewPrefab;
         
         public override void InstallBindings()
         {
@@ -45,7 +45,7 @@ namespace Core.SceneInstallers
         private void InstallLevelButtonSubContainer(DiContainer subContainer, LightLevelModel model, Transform parent)
         {
             subContainer.BindInstance(model).AsSingle();
-            subContainer.Bind<LevelButtonView>()
+            subContainer.Bind<ButtonView>()
                 .FromComponentInNewPrefab(levelButtonViewPrefab)
                 .UnderTransform(parent)
                 .AsSingle();

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class LevelButtonView : MonoBehaviour
+    public class ButtonView : MonoBehaviour
     {
         [SerializeField] private Image image;
         [SerializeField] private Button button;
@@ -18,8 +18,11 @@ namespace UI
         
         public void UpdateImage(Sprite sprite, Color color)
         {
-            image.sprite = sprite;
-            image.color = color;
+            if (image)
+            {
+                image.sprite = sprite;
+                image.color = color;
+            }
         }
     }
 }

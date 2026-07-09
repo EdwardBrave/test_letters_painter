@@ -9,10 +9,10 @@ namespace UI
     public class LevelButtonPresenter : IDisposable
     {
         private readonly LightLevelModel _model;
-        private readonly LevelButtonView _view;
+        private readonly ButtonView _view;
         private readonly MainMenuState _mainMenuState;
 
-        public LevelButtonPresenter(LightLevelModel model, LevelButtonView view, MainMenuState mainMenuState)
+        public LevelButtonPresenter(LightLevelModel model, ButtonView view, MainMenuState mainMenuState)
         {
             _model = model;
             _view = view;
