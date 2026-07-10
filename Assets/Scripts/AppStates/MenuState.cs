@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Game.Model;
 using Services;
-using TracingSystem.Model;
-using UI;
 using UI.Menu;
 using UnityEngine.SceneManagement;
 using Zenject;

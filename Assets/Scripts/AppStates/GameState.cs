@@ -1,7 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
+using Game;
+using Game.Model;
 using Services;
-using TracingSystem;
-using TracingSystem.Model;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -12,11 +13,13 @@ namespace AppStates
         private readonly GameLevelPresenter.Factory _gameLevelPresenterFactory;
         private readonly LevelSerializationService _levelSerializationService;
         private readonly LevelLoadingService _levelLoadingService;
+        private readonly DiContainer _container;
         private readonly DiContainer _projectContainer;
 
-        public GameState(GameLevelPresenter.Factory gameLevelPresenterFactory, 
+        public GameState(DiContainer container, GameLevelPresenter.Factory gameLevelPresenterFactory,
             LevelSerializationService levelSerializationService, LevelLoadingService levelLoadingService)
         {
+            _container = container;
             _projectContainer = ProjectContext.Instance.Container;
             _gameLevelPresenterFactory = gameLevelPresenterFactory;
             _levelSerializationService = levelSerializationService;
@@ -25,6 +28,12 @@ namespace AppStates
         
         public void Initialize()
         {
+            // Unbinding dummy model
+            if (_container.HasBinding<FullLevelModel>())
+            {
+                _container.Unbind<FullLevelModel>();
+            }
+            
             if (_projectContainer.HasBinding<FullLevelModel>())
             {
                 CreateLevel();

@@ -1,6 +1,6 @@
 ﻿using AppStates;
+using Game.Model;
 using Services.Scene;
-using TracingSystem.Model;
 using UI;
 using UI.Menu;
 using UnityEngine;

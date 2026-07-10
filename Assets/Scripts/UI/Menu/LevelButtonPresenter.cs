@@ -1,6 +1,6 @@
 ﻿using System;
 using AppStates;
-using TracingSystem.Model;
+using Game.Model;
 using UnityEngine;
 using Zenject;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace TracingSystem.Model
+namespace Game.Model
 {
     public class LineModel
     {

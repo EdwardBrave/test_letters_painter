@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Services;
 using Tools;
 using UnityEngine;
 
-namespace TracingSystem.Model
+namespace Game.Model
 {
     public enum LevelCategory
     {

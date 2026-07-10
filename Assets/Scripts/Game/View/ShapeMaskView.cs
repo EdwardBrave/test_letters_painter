@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TracingSystem.View
+namespace Game.View
 {
     public class ShapeMaskView : MonoBehaviour
     {

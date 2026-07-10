@@ -1,8 +1,8 @@
 using System;
-using TracingSystem.Model;
+using Game.Model;
 using UnityEngine;
 
-namespace TracingSystem.Dto
+namespace Game.Dto
 {
     [Serializable]
     public struct LevelDto

@@ -1,16 +1,19 @@
 using System;
-using TracingSystem.Model;
-using TracingSystem.View;
+using Game.Model;
+using Game.View;
+using UnityEngine.Splines;
 using Zenject;
 
-namespace TracingSystem
+namespace Game
 {
     public class GameLevelPresenter : IInitializable, IDisposable
     {
         private readonly GameLevelView _view;
         private readonly FullLevelModel _model;
         private readonly LineTracerView.Factory _lineViewFactory;
-
+        
+        private Spline _activeSpline;
+        
         public GameLevelPresenter(FullLevelModel model, GameLevelView view, LineTracerView.Factory lineViewFactory)
         {
             _model = model;

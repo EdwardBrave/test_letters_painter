@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TracingSystem.Model;
+using Game.Model;
 
 namespace UI.Menu
 {

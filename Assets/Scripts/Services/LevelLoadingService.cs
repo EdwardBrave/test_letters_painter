@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using TracingSystem.Dto;
-using TracingSystem.Model;
+using Game.Dto;
+using Game.Model;
 using UnityEngine;
 
 namespace Services

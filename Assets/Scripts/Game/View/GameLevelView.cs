@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TracingSystem.View
+namespace Game.View
 {
     public class GameLevelView : MonoBehaviour
     {

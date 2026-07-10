@@ -1,16 +1,15 @@
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+
 using System.Collections.Generic;
+using Game.Dto;
+using Game.Model;
+using Game.View;
 using Services;
-using TracingSystem.Dto;
-using TracingSystem.Model;
-using TracingSystem.View;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 
-namespace TracingSystem
+namespace Game
 {
     public class LevelModelBuilder : MonoBehaviour
     {

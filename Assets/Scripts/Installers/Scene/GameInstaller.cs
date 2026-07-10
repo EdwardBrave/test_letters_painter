@@ -1,7 +1,8 @@
 using AppStates;
+using Game;
+using Game.Model;
+using Game.View;
 using Services.Scene;
-using TracingSystem;
-using TracingSystem.View;
 using UI;
 using UI.Game;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace Installers.Scene
             Container.BindInstance(homeButton).WhenInjectedInto<HomeButtonPresenter>();
             Container.BindInterfacesAndSelfTo<HomeButtonPresenter>().AsSingle().NonLazy();
 
+            Container.Bind<FullLevelModel>().AsSingle(); // Binding of a dummy model. Real one is injected with the state
             Container.BindFactory<GameLevelPresenter, GameLevelPresenter.Factory>()
                 .FromSubContainerResolve()
                 .ByMethod(InstallGameLevelSubContainer);

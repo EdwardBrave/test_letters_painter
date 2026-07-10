@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace TracingSystem.View
+namespace Game.View
 {
     public class LineTracerView : MonoBehaviour
     {
