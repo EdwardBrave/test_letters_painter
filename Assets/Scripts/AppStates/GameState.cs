@@ -3,8 +3,10 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game;
 using Game.Model;
+using Installers;
 using ModestTree;
 using Services;
+using Services.Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -16,6 +18,8 @@ namespace AppStates
         private readonly GameLevelPresenter.Factory _gameLevelPresenterFactory;
         private readonly LevelSerializationService _levelSerializationService;
         private readonly LevelLoadingService _levelLoadingService;
+        private readonly GameAudioService _gameAudioService;
+        private readonly SettingsInstaller.Audio _audioSettings;
         private readonly DiContainer _container;
         private readonly DiContainer _projectContainer;
         private CancellationTokenSource _cts;
@@ -23,7 +27,8 @@ namespace AppStates
         private GameLevelPresenter _levelPresenter;
 
         public GameState(DiContainer container, GameLevelPresenter.Factory gameLevelPresenterFactory,
-            LevelSerializationService levelSerializationService, LevelLoadingService levelLoadingService)
+            LevelSerializationService levelSerializationService, LevelLoadingService levelLoadingService,
+            GameAudioService gameAudioService, SettingsInstaller.Audio audioSettings)
         {
             _cts = new CancellationTokenSource();
             _container = container;
@@ -31,6 +36,8 @@ namespace AppStates
             _gameLevelPresenterFactory = gameLevelPresenterFactory;
             _levelSerializationService = levelSerializationService;
             _levelLoadingService = levelLoadingService;
+            _gameAudioService = gameAudioService;
+            _audioSettings = audioSettings;
         }
         
         public void Initialize()
@@ -87,6 +94,9 @@ namespace AppStates
             {
                 _levelPresenter = _gameLevelPresenterFactory.Create();
                 _levelPresenter.Initialize();
+                
+                var model = _projectContainer.Resolve<FullLevelModel>();
+                _gameAudioService.Play(model.GoalAudio);
 
                 while (_levelPresenter.PlayNextLine())
                 {
@@ -98,7 +108,14 @@ namespace AppStates
                     token.ThrowIfCancellationRequested();
                 }
 
-                var model = _projectContainer.Resolve<FullLevelModel>();
+                AudioClip congratsClip = PlayRandomCongratsAudio();
+                if (congratsClip != null)
+                {
+                    await UniTask.Delay(System.TimeSpan.FromSeconds(congratsClip.length), DelayType.DeltaTime, PlayerLoopTiming.Update, token);
+                }
+
+                await UniTask.Delay(100, DelayType.DeltaTime, PlayerLoopTiming.Update, token);
+                
                 var levelNames = _levelSerializationService.GetLevelNames(model.Category);
                 int nextIndex = (levelNames.IndexOf(model.Name) + 1) % levelNames.Length;
                 
@@ -119,6 +136,30 @@ namespace AppStates
             token.ThrowIfCancellationRequested();
             
             _projectContainer.BindInterfacesAndSelfTo<FullLevelModel>().FromInstance(fullLevelModel);
+        }
+        
+        private AudioClip PlayRandomCongratsAudio()
+        {
+            if (_audioSettings.congratsAudioClips == null || _audioSettings.congratsAudioClips.Count == 0)
+            {
+                return null;
+            }
+
+            int startIndex = Random.Range(0, _audioSettings.congratsAudioClips.Count);
+            for (int i = 0; i < _audioSettings.congratsAudioClips.Count; i++)
+            {
+                int index = (startIndex + i) % _audioSettings.congratsAudioClips.Count;
+                AudioClip clip = _audioSettings.congratsAudioClips[index];
+                if (clip == null)
+                {
+                    continue;
+                }
+                
+                _gameAudioService.Play(clip);
+                return clip;
+            }
+
+            return null;
         }
 
     }

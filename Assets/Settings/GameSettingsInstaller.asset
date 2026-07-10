@@ -15,3 +15,9 @@ MonoBehaviour:
   tracing:
     maxTracingDistance: 1
     completionOffsetDistance: 0.3
+  audio:
+    volume: 0.8
+    congratsAudioClips:
+    - {fileID: 8300000, guid: 8672d2ccec71b2d4a91edc22b68d0158, type: 3}
+    - {fileID: 8300000, guid: 669a9633c453f4d4fade5e7bd99a876a, type: 3}
+    - {fileID: 8300000, guid: 72df0870b98257a42990e5959336a842, type: 3}

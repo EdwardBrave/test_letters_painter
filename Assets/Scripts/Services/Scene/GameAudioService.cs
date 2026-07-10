@@ -1,19 +1,50 @@
-﻿using UnityEngine;
+﻿using System;
+using Installers;
+using UnityEngine;
+using Zenject;
 
 namespace Services.Scene
 {
-    public class GameAudioService
+    public class GameAudioService : IInitializable, IDisposable
     {
         private AudioSource _audioSource;
+        private SettingsInstaller.Audio _audioSettings;
 
-        public GameAudioService(AudioSource audioSource)
+        public GameAudioService(AudioSource audioSource, SettingsInstaller.Audio audio)
         {
             _audioSource = audioSource;
+            _audioSettings = audio;
         }
-        
+
+        public void Initialize()
+        {
+            _audioSource.enabled = true;
+        }
+
         public void Play(AudioClip clip)
         {
-            _audioSource.PlayOneShot(clip);
+            if (_audioSource == null || clip == null)
+            {
+                return;
+            }
+            
+            _audioSource.PlayOneShot(clip, _audioSettings.volume);
+        }
+
+        public void Stop(AudioClip clip)
+        {
+            if (_audioSource == null)
+            {
+                return;
+            }
+            
+            _audioSource.Stop();
+        }
+
+        public void Dispose()
+        {
+            _audioSource.Stop();
+            _audioSource.enabled = false;
         }
     }
 }
