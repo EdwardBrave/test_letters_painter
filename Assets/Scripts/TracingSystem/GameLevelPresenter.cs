@@ -5,13 +5,13 @@ using Zenject;
 
 namespace TracingSystem
 {
-    public class LevelPresenter : IInitializable, IDisposable
+    public class GameLevelPresenter : IInitializable, IDisposable
     {
         private readonly LevelView _view;
         private readonly FullLevelModel _model;
         private readonly LineTracerView.Factory _lineViewFactory;
 
-        public LevelPresenter(FullLevelModel model, LevelView view, LineTracerView.Factory lineViewFactory)
+        public GameLevelPresenter(FullLevelModel model, LevelView view, LineTracerView.Factory lineViewFactory)
         {
             _model = model;
             _view = view;

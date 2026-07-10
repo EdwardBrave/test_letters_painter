@@ -1,10 +1,11 @@
-using Core.States;
+using AppStates;
 using Services.Scene;
 using UI;
+using UI.Game;
 using UnityEngine;
 using Zenject;
 
-namespace Core.SceneInstallers
+namespace Installers.Scene
 {
     public class GameInstaller : MonoInstaller<GameInstaller>
     {

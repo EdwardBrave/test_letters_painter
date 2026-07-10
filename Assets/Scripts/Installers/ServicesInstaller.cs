@@ -1,7 +1,7 @@
 using Services;
 using Zenject;
 
-namespace Core
+namespace Installers
 {
     public class ServicesInstaller : MonoInstaller
     {

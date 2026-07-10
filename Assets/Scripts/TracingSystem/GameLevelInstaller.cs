@@ -5,7 +5,7 @@ using Zenject;
 
 namespace TracingSystem
 {
-    public class LevelInstaller : MonoInstaller<LevelInstaller>
+    public class GameLevelInstaller : MonoInstaller<GameLevelInstaller>
     {
         [SerializeField] private LevelView levelView;
         [SerializeField] private LineTracerView lineViewPrefab;
@@ -23,7 +23,7 @@ namespace TracingSystem
                 .UnderTransform(lineViewContainer)
                 .AsSingle();
             Container.BindInstance(levelView).AsSingle();
-            Container.BindInterfacesAndSelfTo<LevelPresenter>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<GameLevelPresenter>().AsSingle().NonLazy();
         }
     }
 }

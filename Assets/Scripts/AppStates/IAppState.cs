@@ -1,7 +1,7 @@
 ﻿using System;
 using Zenject;
 
-namespace Core.States
+namespace AppStates
 {
     public interface IAppState : IInitializable, IDisposable
     {

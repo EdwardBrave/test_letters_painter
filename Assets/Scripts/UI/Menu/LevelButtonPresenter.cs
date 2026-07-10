@@ -1,22 +1,22 @@
 ﻿using System;
-using Core.States;
+using AppStates;
 using TracingSystem.Model;
 using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace UI.Menu
 {
     public class LevelButtonPresenter : IDisposable
     {
         private readonly LightLevelModel _model;
         private readonly ButtonView _view;
-        private readonly MainMenuState _mainMenuState;
+        private readonly MenuState menuState;
 
-        public LevelButtonPresenter(LightLevelModel model, ButtonView view, MainMenuState mainMenuState)
+        public LevelButtonPresenter(LightLevelModel model, ButtonView view, MenuState menuState)
         {
             _model = model;
             _view = view;
-            _mainMenuState = mainMenuState;
+            this.menuState = menuState;
         }
 
         public void Initialize()
@@ -27,7 +27,7 @@ namespace UI
 
         private void OnLevelButtonClick()
         {
-            _mainMenuState.TryLoadLevel(_model.Name);
+            menuState.TryLoadLevel(_model.Name);
         }
 
         public void Dispose()

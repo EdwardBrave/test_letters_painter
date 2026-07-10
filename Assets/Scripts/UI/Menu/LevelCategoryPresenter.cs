@@ -1,6 +1,6 @@
 ﻿using Zenject;
 
-namespace UI
+namespace UI.Menu
 {
     public class LevelCategoryPresenter
     {

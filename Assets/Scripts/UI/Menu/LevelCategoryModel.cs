@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TracingSystem.Model;
 
-namespace UI
+namespace UI.Menu
 {
     public class LevelCategoryModel
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using Core.States;
+using AppStates;
 using Zenject;
 
-namespace UI
+namespace UI.Game
 {
     public class HomeButtonPresenter : IInitializable, IDisposable
     {

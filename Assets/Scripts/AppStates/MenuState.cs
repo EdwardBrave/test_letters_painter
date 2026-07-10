@@ -4,12 +4,13 @@ using Cysharp.Threading.Tasks;
 using Services;
 using TracingSystem.Model;
 using UI;
+using UI.Menu;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Core.States
+namespace AppStates
 {
-    public class MainMenuState : IAppState
+    public class MenuState : IAppState
     {
         private readonly LevelLoadingService _levelLoadingService;
         private readonly LevelCategoryPresenter.Factory _categoryPresenterFactory;
@@ -17,7 +18,7 @@ namespace Core.States
         
         private bool _isLevelLoading = false;
 
-        public MainMenuState(LevelLoadingService levelLoadingService, LevelCategoryPresenter.Factory categoryPresenterFactory)
+        public MenuState(LevelLoadingService levelLoadingService, LevelCategoryPresenter.Factory categoryPresenterFactory)
         {
             _levelLoadingService = levelLoadingService;
             _categoryPresenterFactory = categoryPresenterFactory;

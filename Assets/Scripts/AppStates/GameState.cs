@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 
-namespace Core.States
+namespace AppStates
 {
     public class GameState : IAppState
     {

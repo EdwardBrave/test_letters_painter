@@ -1,13 +1,14 @@
-﻿using Core.States;
+﻿using AppStates;
 using Services.Scene;
 using TracingSystem.Model;
 using UI;
+using UI.Menu;
 using UnityEngine;
 using Zenject;
 
-namespace Core.SceneInstallers
+namespace Installers.Scene
 {
-    public class MainMenuInstaller : MonoInstaller<GameInstaller>
+    public class MenuInstaller : MonoInstaller<GameInstaller>
     {
         [SerializeField] private Transform categoriesContainer;
         
@@ -28,7 +29,7 @@ namespace Core.SceneInstallers
                 .FromSubContainerResolve()
                 .ByMethod(InstallLevelButtonSubContainer);
             
-            Container.BindInterfacesAndSelfTo<MainMenuState>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<MenuState>().AsSingle().NonLazy();
         }
 
         private void InstallCategorySubContainer(DiContainer subContainer, LevelCategoryModel model)
