@@ -78,6 +78,11 @@ namespace Game
             }
 
             SplineUtility.GetNearestPoint(_activeSpline, worldPosition, out float3 nearest, out float progress);
+
+            if (progress - line.Progress > _tracingSettings.progressThreshold)
+            {
+                return;
+            }
             
             if (_activeSpline.GetLength() * (1 - progress) <= _tracingSettings.completionOffsetDistance)
             {

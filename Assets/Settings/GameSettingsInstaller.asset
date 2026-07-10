@@ -21,3 +21,16 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 8672d2ccec71b2d4a91edc22b68d0158, type: 3}
     - {fileID: 8300000, guid: 669a9633c453f4d4fade5e7bd99a876a, type: 3}
     - {fileID: 8300000, guid: 72df0870b98257a42990e5959336a842, type: 3}
+  helper:
+    audioRepeatDelay: 7
+    helperStartDelay: 14
+  categoryNames:
+    pairs:
+    - displayName: Trace these
+      categoryType: 0
+    - displayName: Trace letters
+      categoryType: 1
+    - displayName: Trace numbers
+      categoryType: 2
+    - displayName: Trace shapes
+      categoryType: 3
