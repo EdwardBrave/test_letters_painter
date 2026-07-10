@@ -11,6 +11,8 @@ namespace Game.View
     {
         [SerializeField] private SpriteRenderer dotPrefab;
         [SerializeField] private SpriteRenderer starPrefab;
+        
+        [SerializeField] private Transform pointer;
 
         [SerializeField] private float dotDistance = 0.5f;
 
@@ -37,6 +39,12 @@ namespace Game.View
             CreatePointAtDistance(spline, starPrefab, splineLength);
         }
 
+        public void UpdatePointer(Spline spline, float progress)
+        {
+            pointer.localScale = Vector3.one;
+            pointer.localPosition = spline.EvaluatePosition(progress);
+        }
+
         private void CreatePointAtDistance(Spline spline, SpriteRenderer prefab, float distance)
         {
             float t = spline.ConvertIndexUnit(distance, PathIndexUnit.Distance, PathIndexUnit.Normalized);
@@ -48,6 +56,8 @@ namespace Game.View
         
         public void Clear()
         {
+            pointer.localScale = Vector3.zero;
+            
             if (dots == null || dots.Count == 0)
             {
                 return;

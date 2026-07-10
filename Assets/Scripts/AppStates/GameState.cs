@@ -90,7 +90,11 @@ namespace AppStates
 
                 while (_levelPresenter.PlayNextLine())
                 {
-                    await UniTask.WaitUntil(() => _levelPresenter.IsLineFinished, PlayerLoopTiming.Update, token,true);
+                    await UniTask.WaitUntil(() =>
+                    {
+                        _levelPresenter.UpdateTracing();
+                        return _levelPresenter.IsLineFinished;
+                    }, PlayerLoopTiming.Update, token,true);
                     token.ThrowIfCancellationRequested();
                 }
 

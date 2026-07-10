@@ -16,12 +16,13 @@ namespace Game.Model
             get => _progress;
             set
             {
-                if (Mathf.Approximately(value, _progress))
+                float newProgress = Mathf.Max(_progress, value);
+                if (newProgress <= _progress)
                 {
                     return;
                 }
                 
-                _progress = value;
+                _progress = Mathf.Approximately(newProgress, 1f) || newProgress > 1f ? 1f : newProgress;
                 OnProgressChanged?.Invoke(_progress);
             }
         }

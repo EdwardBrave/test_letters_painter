@@ -1,7 +1,9 @@
 using System;
 using Game.Model;
 using Game.View;
+using Installers;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Splines;
 using Zenject;
 
@@ -14,14 +16,17 @@ namespace Game
         private readonly GameLevelView _view;
         private readonly FullLevelModel _model;
         private readonly LineTracerView.Factory _lineViewFactory;
+        private readonly SettingsInstaller.Tracing _tracingSettings;
         
         private Spline _activeSpline;
         public int ActiveLineIndex { get; private set; } = -1;
-        public bool IsLineFinished => IsFinished || (0 < ActiveLineIndex && _model.Lines[ActiveLineIndex].IsFinished);
+        public bool IsLineFinished => IsFinished || (0 <= ActiveLineIndex && _model.Lines[ActiveLineIndex].IsFinished);
         public bool IsFinished => ActiveLineIndex >= _model.Lines.Count;
         
-        public GameLevelPresenter(FullLevelModel model, GameLevelView view, LineTracerView.Factory lineViewFactory)
+        public GameLevelPresenter(FullLevelModel model, GameLevelView view, LineTracerView.Factory lineViewFactory,
+            SettingsInstaller.Tracing tracing)
         {
+            _tracingSettings = tracing;
             _activeSpline = new Spline();
             _model = model;
             _view = view;
@@ -32,6 +37,38 @@ namespace Game
         {
             _view.shapeMaskView.UpdateSprite(_model.Shape);
             PopulateLineTracerViews();
+        }
+        
+        public void UpdateTracing()
+        {
+            if (ActiveLineIndex < 0 || IsFinished)
+            {
+                return;
+            }
+
+            if (!TryGetPressedScreenPosition(out Vector2 screenPosition) || 
+                !TryGetWorldPointOnLinePlane(screenPosition, out float3 worldPosition))
+            {
+                return;
+            }
+
+            var line = _model.Lines[ActiveLineIndex];
+            float3 currentPosition = _activeSpline.EvaluatePosition(line.Progress);
+            
+            if (Vector3.Distance(currentPosition, worldPosition) > _tracingSettings.maxTracingDistance)
+            {
+                return;
+            }
+
+            SplineUtility.GetNearestPoint(_activeSpline, worldPosition, out float3 nearest, out float progress);
+            
+            if (_activeSpline.GetLength() * (1 - progress) <= _tracingSettings.completionOffsetDistance)
+            {
+                progress = 1f;
+            }
+            
+            line.Progress = progress;
+            _view.linePathView.UpdatePointer(_activeSpline, line.Progress);
         }
 
         public bool PlayNextLine()
@@ -90,6 +127,50 @@ namespace Game
             }
             
             _view.linePathView.DrawPath(_activeSpline, ActiveLineIndex * ToLineLayer - ToLineLayer/2);
+        }
+
+        private static bool TryGetPressedScreenPosition(out Vector2 screenPosition)
+        {
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+                {
+                    screenPosition = touch.position;
+                    return true;
+                }
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                screenPosition = Input.mousePosition;
+                return true;
+            }
+
+            screenPosition = default;
+            return false;
+        }
+
+        private static bool TryGetWorldPointOnLinePlane(Vector2 screenPosition, out float3 worldPosition)
+        {
+            Camera camera = Camera.main;
+            if (camera == null)
+            {
+                worldPosition = default;
+                return false;
+            }
+
+            Ray ray = camera.ScreenPointToRay(screenPosition);
+            var linePlane = new Plane(Vector3.forward, Vector3.zero);
+            if (!linePlane.Raycast(ray, out float distance))
+            {
+                worldPosition = default;
+                return false;
+            }
+
+            Vector3 position = ray.GetPoint(distance);
+            worldPosition = new float3(position.x, position.y, 0f);
+            return true;
         }
         
         public class Factory : PlaceholderFactory<GameLevelPresenter>
