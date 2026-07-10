@@ -9,6 +9,8 @@ namespace Installers
     [CreateAssetMenu(fileName = "GameSettings", menuName = "Data/GameSettings")]
     public class SettingsInstaller : ScriptableObjectInstaller<SettingsInstaller>
     {
+        [SerializeField] private int targetFPS = 60;
+        
         [SerializeField] private Tracing tracing = new ();
         [SerializeField] private Audio audio = new ();
         [SerializeField] private Helper helper = new ();
@@ -16,6 +18,8 @@ namespace Installers
         
         public override void InstallBindings()
         {
+            Application.targetFrameRate = targetFPS; 
+            
             Container.BindInstance(tracing).AsSingle();
             Container.BindInstance(audio).AsSingle();
             Container.BindInstance(helper).AsSingle();
