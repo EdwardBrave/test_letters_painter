@@ -10,11 +10,13 @@ namespace Installers
     {
         [SerializeField] private Tracing tracing = new ();
         [SerializeField] private Audio audio = new ();
+        [SerializeField] private Helper helper = new ();
         
         public override void InstallBindings()
         {
             Container.BindInstance(tracing).AsSingle();
             Container.BindInstance(audio).AsSingle();
+            Container.BindInstance(helper).AsSingle();
         }
         
         [Serializable]
@@ -22,6 +24,13 @@ namespace Installers
         {
             public float maxTracingDistance = 1f;
             public float completionOffsetDistance = 0.5f;
+        }
+        
+        [Serializable]
+        public class Helper
+        {
+            public float audioRepeatDelay = 7f;
+            public float helperStartDelay = 14f;
         }
         
         [Serializable]

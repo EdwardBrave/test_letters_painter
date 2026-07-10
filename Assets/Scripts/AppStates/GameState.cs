@@ -22,13 +22,17 @@ namespace AppStates
         private readonly SettingsInstaller.Audio _audioSettings;
         private readonly DiContainer _container;
         private readonly DiContainer _projectContainer;
+        private readonly SettingsInstaller.Helper _helperSettings;
         private CancellationTokenSource _cts;
         
         private GameLevelPresenter _levelPresenter;
+        private float _lastPlayerActivityTime;
+        private bool _goalAudioRepeatedForInactivity;
+        private bool _helperSequenceStarted;
 
         public GameState(DiContainer container, GameLevelPresenter.Factory gameLevelPresenterFactory,
             LevelSerializationService levelSerializationService, LevelLoadingService levelLoadingService,
-            GameAudioService gameAudioService, SettingsInstaller.Audio audioSettings)
+            GameAudioService gameAudioService, SettingsInstaller.Audio audioSettings, SettingsInstaller.Helper helper)
         {
             _cts = new CancellationTokenSource();
             _container = container;
@@ -38,6 +42,7 @@ namespace AppStates
             _levelLoadingService = levelLoadingService;
             _gameAudioService = gameAudioService;
             _audioSettings = audioSettings;
+            _helperSettings = helper;
         }
         
         public void Initialize()
@@ -62,6 +67,7 @@ namespace AppStates
         {
             _cts?.Cancel();
             _cts?.Dispose();
+            UnsubscribeFromLevelProgress();
 
             if (_projectContainer.HasBinding<FullLevelModel>())
             {
@@ -93,6 +99,7 @@ namespace AppStates
             while (!token.IsCancellationRequested)
             {
                 _levelPresenter = _gameLevelPresenterFactory.Create();
+                _levelPresenter.OnLevelProgressChanged += HandleLevelProgressChanged;
                 _levelPresenter.Initialize();
                 
                 var model = _projectContainer.Resolve<FullLevelModel>();
@@ -100,9 +107,12 @@ namespace AppStates
 
                 while (_levelPresenter.PlayNextLine())
                 {
+                    ResetPlayerActivityTimer();
+                    
                     await UniTask.WaitUntil(() =>
                     {
                         _levelPresenter.UpdateTracing();
+                        CheckPlayerActivity(model);
                         return _levelPresenter.IsLineFinished;
                     }, PlayerLoopTiming.Update, token,true);
                     token.ThrowIfCancellationRequested();
@@ -118,7 +128,8 @@ namespace AppStates
                 
                 var levelNames = _levelSerializationService.GetLevelNames(model.Category);
                 int nextIndex = (levelNames.IndexOf(model.Name) + 1) % levelNames.Length;
-                
+
+                UnsubscribeFromLevelProgress();
                 _levelPresenter.Dispose();
                 _container.Unbind<GameLevelPresenter>();
                 await LoadFullLevelModel(model.Category, levelNames[nextIndex], token);
@@ -160,6 +171,49 @@ namespace AppStates
             }
 
             return null;
+        }
+        
+        private void CheckPlayerActivity(FullLevelModel model)
+        {
+            if (_levelPresenter == null || _levelPresenter.IsLineFinished)
+            {
+                return;
+            }
+            
+            float idleTime = Time.time - _lastPlayerActivityTime;
+            if (!_goalAudioRepeatedForInactivity && idleTime >= _helperSettings.audioRepeatDelay)
+            {
+                _gameAudioService.Play(model.GoalAudio);
+                _goalAudioRepeatedForInactivity = true;
+            }
+            
+            if (!_helperSequenceStarted && idleTime >= _helperSettings.helperStartDelay)
+            {
+                _gameAudioService.Play(model.GoalAudio);
+                _levelPresenter.StartHelperSequence();
+                _helperSequenceStarted = true;
+            }
+        }
+        
+        private void HandleLevelProgressChanged()
+        {
+            ResetPlayerActivityTimer();
+            _levelPresenter?.EndHelperSequence();
+        }
+        
+        private void ResetPlayerActivityTimer()
+        {
+            _lastPlayerActivityTime = Time.time;
+            _goalAudioRepeatedForInactivity = false;
+            _helperSequenceStarted = false;
+        }
+
+        private void UnsubscribeFromLevelProgress()
+        {
+            if (_levelPresenter != null)
+            {
+                _levelPresenter.OnLevelProgressChanged -= HandleLevelProgressChanged;
+            }
         }
 
     }

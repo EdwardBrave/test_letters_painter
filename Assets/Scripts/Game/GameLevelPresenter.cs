@@ -23,6 +23,8 @@ namespace Game
         public bool IsLineFinished => IsFinished || (0 <= ActiveLineIndex && _model.Lines[ActiveLineIndex].IsFinished);
         public bool IsFinished => ActiveLineIndex >= _model.Lines.Count;
         
+        public event Action OnLevelProgressChanged;
+        
         public GameLevelPresenter(FullLevelModel model, GameLevelView view, LineTracerView.Factory lineViewFactory,
             SettingsInstaller.Tracing tracing)
         {
@@ -39,9 +41,14 @@ namespace Game
             PopulateLineTracerViews();
         }
         
-        public void StartHelperSequence(Spline spline, float progress)
+        public void StartHelperSequence()
         {
-            _view.linePathView.StartHelperSequence(spline, progress);
+            if (ActiveLineIndex < 0 || IsFinished)
+            {
+                return;
+            }
+            
+            _view.linePathView.StartHelperSequence(_activeSpline, _model.Lines[ActiveLineIndex].Progress);
         }
         
         public void EndHelperSequence()
@@ -77,8 +84,14 @@ namespace Game
                 progress = 1f;
             }
             
+            float previousProgress = line.Progress;
             line.Progress = progress;
             _view.linePathView.UpdatePointer(_activeSpline, line.Progress);
+            
+            if (!Mathf.Approximately(previousProgress, line.Progress))
+            {
+                OnLevelProgressChanged?.Invoke();
+            }
         }
 
         public bool PlayNextLine()
@@ -91,7 +104,6 @@ namespace Game
             }
             
             StartTracingForLine(ActiveLineIndex);
-            StartHelperSequence(_activeSpline, _model.Lines[ActiveLineIndex].Progress);
             return true;
         }
 
@@ -103,6 +115,7 @@ namespace Game
                 _model.Lines[i].OnProgressChanged -= _view.lineTracerViews[i].ApplyProgressChange;
             }
             
+            OnLevelProgressChanged = null;
             _view.Dispose();
         }
         
