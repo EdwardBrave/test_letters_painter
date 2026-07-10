@@ -39,6 +39,16 @@ namespace Game
             PopulateLineTracerViews();
         }
         
+        public void StartHelperSequence(Spline spline, float progress)
+        {
+            _view.linePathView.StartHelperSequence(spline, progress);
+        }
+        
+        public void EndHelperSequence()
+        {
+            _view.linePathView.EndHelperSequence();
+        }
+        
         public void UpdateTracing()
         {
             if (ActiveLineIndex < 0 || IsFinished)
@@ -81,6 +91,7 @@ namespace Game
             }
             
             StartTracingForLine(ActiveLineIndex);
+            StartHelperSequence(_activeSpline, _model.Lines[ActiveLineIndex].Progress);
             return true;
         }
 

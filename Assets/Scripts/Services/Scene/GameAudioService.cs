@@ -21,23 +21,23 @@ namespace Services.Scene
             _audioSource.enabled = true;
         }
 
-        public void Play(AudioClip clip)
+        public void Play(AudioClip clip, bool stopOthers = true)
         {
-            if (_audioSource == null || clip == null)
+            if (clip == null)
             {
                 return;
+            }
+            
+            if (stopOthers)
+            {
+                _audioSource.Stop();
             }
             
             _audioSource.PlayOneShot(clip, _audioSettings.volume);
         }
 
-        public void Stop(AudioClip clip)
+        public void Stop()
         {
-            if (_audioSource == null)
-            {
-                return;
-            }
-            
             _audioSource.Stop();
         }
 
