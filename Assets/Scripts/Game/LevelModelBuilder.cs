@@ -8,6 +8,7 @@ using TracingSystem.Model;
 using TracingSystem.View;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 namespace TracingSystem
 {
@@ -18,7 +19,7 @@ namespace TracingSystem
         [Header("Configs and references")]
         public LineTracerView lineTracerViewPrefab;
 
-        public LevelView levelView;
+        [FormerlySerializedAs("levelView")] public GameLevelView gameLevelView;
 
         [Header("Current State Data")]
         public LevelCategory levelCategory;
@@ -30,14 +31,14 @@ namespace TracingSystem
 #if UNITY_EDITOR
         public void OnValidate()
         {
-            if (!levelView)
+            if (!gameLevelView)
                 return;
 
-            if (shapeAssetRef != null && !string.IsNullOrEmpty(shapeAssetRef.AssetGUID) && levelView.shapeMaskView != null)
+            if (shapeAssetRef != null && !string.IsNullOrEmpty(shapeAssetRef.AssetGUID) && gameLevelView.shapeMaskView != null)
             {
                 string path = AssetDatabase.GUIDToAssetPath(shapeAssetRef.AssetGUID);
                 Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-                levelView.shapeMaskView.UpdateSprite(sprite);
+                gameLevelView.shapeMaskView.UpdateSprite(sprite);
             }
 
             RefreshLineTracerViews();
@@ -45,9 +46,9 @@ namespace TracingSystem
         
         public void RefreshLineTracerViews()
         {
-            levelView.lineTracerViews = new List<LineTracerView>(
-                levelView.linesContainer.GetComponentsInChildren<LineTracerView>());
-            foreach (var lineTracerView in levelView.lineTracerViews)
+            gameLevelView.lineTracerViews = new List<LineTracerView>(
+                gameLevelView.linesContainer.GetComponentsInChildren<LineTracerView>());
+            foreach (var lineTracerView in gameLevelView.lineTracerViews)
             {
                 lineTracerView.ApplyColor(mainColor);
             }
@@ -55,7 +56,7 @@ namespace TracingSystem
 
         public void InstantiateLineTracerView(LevelDto.LineDto? lineDto = null)
         {
-            var newLine = PrefabUtility.InstantiatePrefab(lineTracerViewPrefab, levelView.linesContainer);
+            var newLine = PrefabUtility.InstantiatePrefab(lineTracerViewPrefab, gameLevelView.linesContainer);
             if (newLine is LineTracerView view && lineDto.HasValue)
             {
                 view.Init(lineDto.Value.points, lineDto.Value.width, mainColor);
@@ -67,7 +68,7 @@ namespace TracingSystem
             OnValidate();
 
             var lines = new List<LevelDto.LineDto>();
-            foreach (var lineTracerView in levelView.lineTracerViews)
+            foreach (var lineTracerView in gameLevelView.lineTracerViews)
             {
                 var lineRenderer = lineTracerView.LineRenderer;
                 if (lineRenderer == null || lineRenderer.positionCount == 0)
@@ -104,7 +105,7 @@ namespace TracingSystem
             goalAudioRef = new AssetReferenceT<AudioClip>(dto.goalAudioAssetGUID);
             mainColor = dto.mainColor;
 
-            var oldComponents = levelView.linesContainer.GetComponentsInChildren<LineTracerView>();
+            var oldComponents = gameLevelView.linesContainer.GetComponentsInChildren<LineTracerView>();
             for (int i = oldComponents.Length - 1; i >= 0; --i)
             {
                 DestroyImmediate(oldComponents[i].gameObject);

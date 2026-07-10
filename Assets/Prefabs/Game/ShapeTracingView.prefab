@@ -167,8 +167,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7760435787884744629}
-  - component: {fileID: 2482008271824358019}
-  - component: {fileID: 5914034371045217912}
   - component: {fileID: 9180117667324990126}
   m_Layer: 0
   m_Name: ShapeTracingView
@@ -193,39 +191,6 @@ Transform:
   - {fileID: 3604182324463399094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2482008271824358019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667450533590713375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
-  _monoInstallers:
-  - {fileID: 5914034371045217912}
-  _installerPrefabs: []
-  _autoRun: 1
-  _kernel: {fileID: 0}
---- !u!114 &5914034371045217912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667450533590713375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18218ba376084a71a8d36bfe10517785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelView: {fileID: 9180117667324990126}
-  lineViewPrefab: {fileID: 6685646865161351413, guid: 04df8b1224e074a4394af1ef7f8a7424, type: 3}
-  lineViewContainer: {fileID: 7760435787884744629}
 --- !u!114 &9180117667324990126
 MonoBehaviour:
   m_ObjectHideFlags: 0

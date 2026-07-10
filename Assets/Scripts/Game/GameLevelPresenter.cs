@@ -7,11 +7,11 @@ namespace TracingSystem
 {
     public class GameLevelPresenter : IInitializable, IDisposable
     {
-        private readonly LevelView _view;
+        private readonly GameLevelView _view;
         private readonly FullLevelModel _model;
         private readonly LineTracerView.Factory _lineViewFactory;
 
-        public GameLevelPresenter(FullLevelModel model, LevelView view, LineTracerView.Factory lineViewFactory)
+        public GameLevelPresenter(FullLevelModel model, GameLevelView view, LineTracerView.Factory lineViewFactory)
         {
             _model = model;
             _view = view;
@@ -39,6 +39,10 @@ namespace TracingSystem
         }
 
         public void Dispose()
+        {
+        }
+        
+        public class Factory : PlaceholderFactory<GameLevelPresenter>
         {
         }
     }

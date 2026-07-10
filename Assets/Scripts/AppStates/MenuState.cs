@@ -26,12 +26,6 @@ namespace AppStates
         
         public void Initialize()
         {
-            var projectContainer = ProjectContext.Instance.Container;
-            if (projectContainer.HasBinding<FullLevelModel>())
-            {
-                projectContainer.Unbind<FullLevelModel>();
-            }
-
             InitializeAsync().Forget();
         }
         

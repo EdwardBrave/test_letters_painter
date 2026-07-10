@@ -12,11 +12,11 @@ namespace Services
     public class LevelLoadingService
     {
         private readonly AssetLoadingService _assetLoadingService;
-        private readonly LevelSerializationService levelLevelSerializationServiceService;
+        private readonly LevelSerializationService _levelSerializationService;
 
-        public LevelLoadingService(LevelSerializationService levelLevelSerializationServiceService, AssetLoadingService assetLoadingService)
+        public LevelLoadingService(LevelSerializationService levelSerializationService, AssetLoadingService assetLoadingService)
         {
-            this.levelLevelSerializationServiceService = levelLevelSerializationServiceService;
+            _levelSerializationService = levelSerializationService;
             _assetLoadingService = assetLoadingService;
         }
         
@@ -24,7 +24,7 @@ namespace Services
         {
             var lightLevels = new List<LightLevelModel>();
             
-            var levelNames = levelLevelSerializationServiceService.GetLevelNames();
+            var levelNames = _levelSerializationService.GetLevelNames();
             if (levelNames.Length == 0)
             {
                 Debug.LogWarning("No levels found.");
@@ -33,7 +33,7 @@ namespace Services
             
             foreach (var levelName in levelNames)
             {
-                LevelDto dto = levelLevelSerializationServiceService.ReadFromFile(levelName);
+                LevelDto dto = _levelSerializationService.ReadFromFile(levelName);
 
                 using var contextLoading = _assetLoadingService.StartAsyncContextLoading(token);
                 
@@ -57,7 +57,7 @@ namespace Services
                 throw new ArgumentException("Level name is required.", nameof(levelName));
             }
 
-            LevelDto dto = levelLevelSerializationServiceService.ReadFromFile(levelName);
+            LevelDto dto = _levelSerializationService.ReadFromFile(levelName);
 
             using var contextLoading = _assetLoadingService.StartAsyncContextLoading(token);
 
