@@ -49,12 +49,13 @@ namespace Game
 
         public void Dispose()
         {
-            _view.linePathView.Clear();
             int count = _model.Lines.Count;
             for (int i = 0; i < count; i++)
             {
                 _model.Lines[i].OnProgressChanged -= _view.lineTracerViews[i].ApplyProgressChange;
             }
+            
+            _view.Dispose();
         }
         
         private void PopulateLineTracerViews()

@@ -27,7 +27,7 @@ namespace UI.Menu
 
         private void OnLevelButtonClick()
         {
-            menuState.TryLoadLevel(_model.Name);
+            menuState.TryLoadLevel(_model.Category, _model.Name);
         }
 
         public void Dispose()

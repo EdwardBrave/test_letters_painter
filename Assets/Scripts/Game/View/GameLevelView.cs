@@ -9,5 +9,13 @@ namespace Game.View
         public LinePathView linePathView;
         public Transform linesContainer;
         public List<LineTracerView> lineTracerViews;
+
+        public void Dispose()
+        {
+            shapeMaskView.UpdateSprite(null);
+            linePathView.Clear();
+            lineTracerViews.Clear();
+            Destroy(gameObject);
+        }
     }
 }

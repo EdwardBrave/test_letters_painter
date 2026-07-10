@@ -25,39 +25,42 @@ namespace Services
             var lightLevels = new List<LightLevelModel>();
             
             var levelNames = _levelSerializationService.GetLevelNames();
-            if (levelNames.Length == 0)
+            if (levelNames.Count == 0)
             {
                 Debug.LogWarning("No levels found.");
                 return lightLevels;
             }
             
-            foreach (var levelName in levelNames)
+            foreach (var levelsCategoryPair in levelNames)
             {
-                LevelDto dto = _levelSerializationService.ReadFromFile(levelName);
+                foreach (var levelName in levelsCategoryPair.Value)
+                {
+                    LevelDto dto = _levelSerializationService.ReadFromFile(levelsCategoryPair.Key, levelName);
 
-                using var contextLoading = _assetLoadingService.StartAsyncContextLoading(token);
-                
-                var model = new LightLevelModel(
-                    string.IsNullOrEmpty(dto.name) ? levelName : dto.name,
-                    dto.category,
-                    dto.mainColor,
-                    await contextLoading.LoadAssetAsync<Sprite>(dto.shapeAssetGUID));
+                    using var contextLoading = _assetLoadingService.StartAsyncContextLoading(token);
+                    
+                    var model = new LightLevelModel(
+                        string.IsNullOrEmpty(dto.name) ? levelName : dto.name,
+                        dto.category,
+                        dto.mainColor,
+                        await contextLoading.LoadAssetAsync<Sprite>(dto.shapeAssetGUID));
 
-                contextLoading.Bind(model);
-                lightLevels.Add(model);
+                    contextLoading.Bind(model);
+                    lightLevels.Add(model);
+                }
             }
             
             return lightLevels;
         }
         
-        public async UniTask<FullLevelModel> LoadFullLevelAsync(string levelName, CancellationToken token = default)
+        public async UniTask<FullLevelModel> LoadFullLevelAsync(LevelCategory category, string levelName, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(levelName))
             {
                 throw new ArgumentException("Level name is required.", nameof(levelName));
             }
 
-            LevelDto dto = _levelSerializationService.ReadFromFile(levelName);
+            LevelDto dto = _levelSerializationService.ReadFromFile(category, levelName);
 
             using var contextLoading = _assetLoadingService.StartAsyncContextLoading(token);
 

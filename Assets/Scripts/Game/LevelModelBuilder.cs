@@ -129,7 +129,7 @@ namespace Game
 
         public void ImportFromJson(string filePath)
         {
-            LevelDto dto = levelSerializationService.ReadFromFile(filePath, true);
+            LevelDto dto = levelSerializationService.ReadFromFilePath(filePath);
             ApplyLevelDto(dto);
         }
 #endif

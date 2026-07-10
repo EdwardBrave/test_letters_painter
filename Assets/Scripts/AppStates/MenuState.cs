@@ -65,7 +65,7 @@ namespace AppStates
             _lightLevelModels.Clear();
         }
 
-        public void TryLoadLevel(string modelName)
+        public void TryLoadLevel(LevelCategory category, string modelName)
         {
             if (_isLevelLoading)
             {
@@ -73,23 +73,21 @@ namespace AppStates
             }
 
             _isLevelLoading = true;
-            TryLoadLevelAsync(modelName).Forget();
+            TryLoadLevelAsync(category, modelName).Forget();
         }
         
-        private async UniTaskVoid TryLoadLevelAsync(string modelName)
+        private async UniTaskVoid TryLoadLevelAsync(LevelCategory category, string modelName)
         {
             try
             {
-                var level = await _levelLoadingService.LoadFullLevelAsync(modelName);
+                var level = await _levelLoadingService.LoadFullLevelAsync(category, modelName);
                 var projectContainer = ProjectContext.Instance.Container;
                 if (projectContainer.HasBinding<FullLevelModel>())
                 {
-                    projectContainer.Rebind<FullLevelModel>().FromInstance(level);
+                    projectContainer.Unbind<FullLevelModel>();
                 }
-                else
-                {
-                    projectContainer.BindInstance(level);
-                }
+               
+                projectContainer.BindInterfacesAndSelfTo<FullLevelModel>().FromInstance(level);
                 
                 SceneManager.LoadScene("Game");
             }
