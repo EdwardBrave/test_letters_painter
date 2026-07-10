@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Game;
 using Game.Model;
 using Services;
@@ -15,6 +14,8 @@ namespace AppStates
         private readonly LevelLoadingService _levelLoadingService;
         private readonly DiContainer _container;
         private readonly DiContainer _projectContainer;
+        
+        private GameLevelPresenter _levelPresenter;
 
         public GameState(DiContainer container, GameLevelPresenter.Factory gameLevelPresenterFactory,
             LevelSerializationService levelSerializationService, LevelLoadingService levelLoadingService)
@@ -36,12 +37,25 @@ namespace AppStates
             
             if (_projectContainer.HasBinding<FullLevelModel>())
             {
-                CreateLevel();
+                PlayLevelAsync().Forget();
             }
             else
             {
                 InitializeAsync().Forget();
             }
+        }
+        
+        public void Dispose()
+        {
+            if (_projectContainer.HasBinding<FullLevelModel>())
+            {
+                _projectContainer.Unbind<FullLevelModel>();
+            }
+        }
+
+        public void GoToMainMenu()
+        {
+            SceneManager.LoadScene("Menu");
         }
         
         private async UniTaskVoid InitializeAsync()
@@ -55,26 +69,19 @@ namespace AppStates
             var fullLevelModel = await _levelLoadingService.LoadFullLevelAsync(levelNames[0]);
             _projectContainer.BindInstance(fullLevelModel);
 
-            CreateLevel();
+            await PlayLevelAsync();
         }
 
-        private void CreateLevel()
+        private async UniTask PlayLevelAsync()
         {
-            var levelPresenter = _gameLevelPresenterFactory.Create();
-            levelPresenter.Initialize();
-        }
+            _levelPresenter = _gameLevelPresenterFactory.Create();
+            _levelPresenter.Initialize();
 
-        public void Dispose()
-        {
-            if (_projectContainer.HasBinding<FullLevelModel>())
+            while (_levelPresenter.PlayNextLine())
             {
-                _projectContainer.Unbind<FullLevelModel>();
+                await UniTask.WaitForSeconds(2f);
             }
         }
 
-        public void GoToMainMenu()
-        {
-            SceneManager.LoadScene("Menu");
-        }
     }
 }

@@ -58,7 +58,7 @@ namespace Game
             var newLine = PrefabUtility.InstantiatePrefab(lineTracerViewPrefab, gameLevelView.linesContainer);
             if (newLine is LineTracerView view && lineDto.HasValue)
             {
-                view.Init(lineDto.Value.points, lineDto.Value.width, mainColor);
+                view.Init(0, lineDto.Value.points, lineDto.Value.width, mainColor);
             }
         }
         

@@ -11,8 +11,9 @@ namespace Game.View
         
         public LineRenderer LineRenderer => lineRenderer;
 
-        public void Init(IReadOnlyList<Vector2> points, float width, Color color, float progress = 0f)
+        public void Init(float layer, IReadOnlyList<Vector2> points, float width, Color color, float progress = 0f)
         {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -layer);
             lineRenderer.startWidth = lineRenderer.endWidth = width;
             ApplyColor(color);
             ApplyProgressChange(progress);

@@ -25,6 +25,8 @@ namespace Game.Model
                 OnProgressChanged?.Invoke(_progress);
             }
         }
+        
+        public bool IsFinished => Progress >= 1f;
 
         public LineModel(float width, Vector2[] points)
         {

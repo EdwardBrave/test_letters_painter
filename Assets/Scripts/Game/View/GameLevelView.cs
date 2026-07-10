@@ -6,6 +6,7 @@ namespace Game.View
     public class GameLevelView : MonoBehaviour
     {
         public ShapeMaskView shapeMaskView;
+        public LinePathView linePathView;
         public Transform linesContainer;
         public List<LineTracerView> lineTracerViews;
     }
